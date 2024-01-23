@@ -4,6 +4,8 @@ from icalendar import Calendar
 from dateutil import tz
 from datetime import datetime, timedelta
 from PIL import Image, ImageFont, ImageDraw
+import pkg_resources
+from io import BytesIO
 
 from dinky.layouts.layout_configuration import Zone
 
@@ -61,19 +63,25 @@ class DinkyCalendarPlugin:
         draw = ImageDraw.Draw(im)
         draw.rectangle((zone.padding, zone.padding, zone.width - zone.padding, zone.padding + 55), fill=self.primary_color)
 
-        fnt_weekday = ImageFont.truetype("arialbd.ttf", 24)
-        fnt_date = ImageFont.truetype("arial.ttf", 36)
-        fnt_title = ImageFont.truetype("arialbd.ttf", 14)
-        fnt_regular = ImageFont.truetype("arial.ttf", 14)
+        font_data = pkg_resources.resource_stream('dinky_calendar', 'fonts/Roboto-Regular.ttf')
+        font_bytes = BytesIO(font_data.read())
+        font_date = ImageFont.truetype(font_bytes, 36)
+        font_bytes.seek(0)
+        font_regular = ImageFont.truetype(font_bytes, 14)
+        font_data = pkg_resources.resource_stream('dinky_calendar', 'fonts/Roboto-Bold.ttf')
+        font_bytes = BytesIO(font_data.read())
+        font_weekday = ImageFont.truetype(font_bytes, 24)
+        font_bytes.seek(0)
+        font_title = ImageFont.truetype(font_bytes, 14)
 
         today = datetime.today()
-        draw.text((zone.padding + 5, zone.padding + 5), today.strftime('%b %d'), font=fnt_date, fill="white")
-        draw.text((zone.width - 60, zone.padding + 5), today.strftime('%a'), font=fnt_weekday, fill="white")
+        draw.text((zone.padding + 5, zone.padding + 5), today.strftime('%b %d'), font=font_date, fill="white")
+        draw.text((zone.width - 60, zone.padding + 5), today.strftime('%a'), font=font_weekday, fill="white")
 
         events = self._get_todays_events()
         for i, event in enumerate(events):
-            draw.text((zone.padding + 5, 55 + zone.padding + 5 + (40 * i)), event["title"], font=fnt_title, fill=self.primary_color)
+            draw.text((zone.padding + 5, 55 + zone.padding + 5 + (40 * i)), event["title"], font=font_title, fill=self.primary_color)
             time = event["time"] if event["time"] else ""
             location = f'({event["location"]})' if event['location'] else ""
-            draw.text((zone.padding + 5, 55 + zone.padding + 5 + (40 * i) + 18), f'{time} {location}', font=fnt_regular, fill="black")
+            draw.text((zone.padding + 5, 55 + zone.padding + 5 + (40 * i) + 18), f'{time} {location}', font=font_regular, fill="black")
         return im

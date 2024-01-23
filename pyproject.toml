@@ -10,7 +10,8 @@ dependencies = [
     "dinky",
     "pluggy",
     "Pillow",
-    "caldav"
+    "caldav",
+    "setuptools"
 ]
 
 [project.optional-dependencies]
