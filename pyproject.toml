@@ -14,7 +14,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = [
+    "pytest",
+    "dinky"
+]
 
 [tool.setuptools]
 packages = ["dinky_calendar"]
