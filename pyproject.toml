@@ -1,0 +1,20 @@
+[project]
+name = "dinky-calendar"
+version = "0.1"
+description = "Calendar widget for the dinky dashboard"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{name = "Julian Prester"}]
+license = {text = "MIT"}
+dependencies = [
+    "dinky",
+    "pluggy",
+    "Pillow",
+    "caldav"
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools]
+packages = ["dinky_calendar"]
