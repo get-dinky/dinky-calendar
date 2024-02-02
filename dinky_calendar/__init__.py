@@ -7,6 +7,7 @@ import datetime
 from PIL import Image, ImageFont, ImageDraw
 import pkg_resources
 from io import BytesIO
+from typing import List
 
 from dinky.layouts.layout_configuration import Zone
 
@@ -15,7 +16,7 @@ hookimpl = pluggy.HookimplMarker("dinky")
 class DinkyCalendarPlugin:
     primary_color = "#264653"
 
-    def __init__(self, urls: list[str], username: str, password: str, timezone: str):
+    def __init__(self, urls: List[str], username: str, password: str, timezone: str):
         self.urls = urls
         self.username = username
         self.password = password
